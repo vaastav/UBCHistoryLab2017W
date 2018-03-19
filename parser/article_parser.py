@@ -81,7 +81,7 @@ def get_article(filename, dir):
     if valid:
         articles.append(article)
 
-    '''
+    # 2nd round of filtering
     new_articles = []
     for a in articles:
         valid = False
@@ -91,13 +91,13 @@ def get_article(filename, dir):
         if valid:
             new_articles.append(a)
 
-    '''
-    if len(articles) == 0: 
+    
+    if len(new_articles) == 0: 
         print(filename)
     else:
-        output_file = "output/" + filename.split(".")[0] + ".txt"
+        output_file = "output2/" + filename.split(".")[0] + ".txt"
         fo = open(output_file, "w+", encoding="utf8")
-        for a in articles:
+        for a in new_articles:
             for w in a:
                 fo.write(w)
                 fo.write(" ")
