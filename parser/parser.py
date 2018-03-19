@@ -26,13 +26,13 @@ def save_files(urls):
             response = urlopen(url)
             data = response.read()
         except HTTPError:
-            print(url)
+            print("Failed to get : " + url)
             continue
         with open(filename, 'wb+') as f:
             f.write(data)
 
 def usage():
-    print("Usage : parser.py <csv_file_with_urls>")
+    print("Usage : python parser.py <csv_file_with_urls>")
     sys.exit(1)
 
 def main():
