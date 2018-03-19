@@ -87,7 +87,7 @@ def get_article(filename, dir):
         valid = False
         for word in a:
             if levenshteinDistance(word.lower(), keyword2) < MAX_EDITDIST:
-                valid = False
+                valid = True
         if valid:
             new_articles.append(a)
 
