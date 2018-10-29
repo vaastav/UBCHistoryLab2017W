@@ -1,6 +1,9 @@
 import sys
 import os
 
+# Other value would be 2017W2
+HISTORY_LAB_TERM = "2018W1"
+
 def get_published_year(s):
     '''
     Returns the year the full document was published
@@ -39,17 +42,28 @@ def levenshteinDistance(s1, s2):
         distances = distances_
     return distances[-1]
 
+def get_keywords(filename):
+    keyword1 = ""
+    keyword2 = ""
+    if HISTORY_LAB_TERM == "2018W1":
+        keyword1 = "pelee"
+        keyword2 = "eruption"
+    elif HISTORY_LAB_TERM == "2017W2":
+        year = get_published_year(filename)
+        keyword2 = "message"
+        keyword1 = "president"
+        if year >= 1877 and year <= 1880:
+            keyword1 = "annual"        
+    return keyword1, keyword2
+
 def get_article(filename, dir):
-    year = get_published_year(filename)
-    keyword2 = "message"
-    keyword1 = "president"
-    if year >= 1877 and year <= 1880:
-        keyword1 = "annual"
+    keyword1, keyword2 = get_keywords(filename)
 
     MIN_ARTLEN = 50           # Minimum length of an article before starting a new one
     MIN_CAPSLEN = 3           # Minimum number of capital letters in a word to be considered a headline
     MAX_DIFFLEN = 5           # Maximum difference in word lengths to be compared to edit distance
     MAX_EDITDIST = 3          # Maximum edit distance between words to be considered a misspelling
+    MAX_ARTLEN = 200          # Maximum length of an article before starting a new one
 
     # First parse to only find articles with the words president or annual
     full_filename = os.path.join(dir, filename)
@@ -91,11 +105,12 @@ def get_article(filename, dir):
         if valid:
             new_articles.append(a)
 
+    output_dir = "./output_" + dir + "/"
     
     if len(new_articles) == 0: 
         print(filename)
     else:
-        output_file = "output3/" + filename.split(".")[0] + ".txt"
+        output_file = output_dir + filename
         fo = open(output_file, "w+", encoding="utf8")
         for a in new_articles:
             for w in a:
@@ -110,7 +125,7 @@ def get_articles(dir):
             get_article(f, dir)
 
 def usage():
-    print("Usage : python parser.py <folder_with_txt_urls>")
+    print("Usage : python article_parser.py <folder_with_txt_files>")
     sys.exit(1)
 
 def main():
