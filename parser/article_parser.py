@@ -95,7 +95,7 @@ def get_article(filename, dir):
     if len(new_articles) == 0: 
         print(filename)
     else:
-        output_file = "output2/" + filename.split(".")[0] + ".txt"
+        output_file = "output3/" + filename.split(".")[0] + ".txt"
         fo = open(output_file, "w+", encoding="utf8")
         for a in new_articles:
             for w in a:

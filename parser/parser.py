@@ -19,7 +19,7 @@ def save_files(urls):
         if name:
             filename = name.group(1)
             filename = filename.replace('/', '_')
-        filename = os.path.join('./raw_data', filename)
+        filename = os.path.join('./raw_data2', filename)
         if os.path.isfile(filename):
             continue
         try:
