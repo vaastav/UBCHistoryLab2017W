@@ -56,8 +56,8 @@ def get_keywords(filename):
             keyword1 = "annual"        
     return keyword1, keyword2
 
-def get_article(filename, dir):
-    keyword1, keyword2 = get_keywords(filename)
+def get_article(filename, dir, keyword1, keyword2):
+    #keyword1, keyword2 = get_keywords(filename)
 
     MIN_ARTLEN = 50           # Minimum length of an article before starting a new one
     MIN_CAPSLEN = 3           # Minimum number of capital letters in a word to be considered a headline
@@ -97,13 +97,16 @@ def get_article(filename, dir):
 
     # 2nd round of filtering
     new_articles = []
-    for a in articles:
-        valid = False
-        for word in a:
-            if levenshteinDistance(word.lower(), keyword2) < MAX_EDITDIST:
-                valid = True
-        if valid:
-            new_articles.append(a)
+    if keyword2 != "":
+        for a in articles:
+            valid = False
+            for word in a:
+                if levenshteinDistance(word.lower(), keyword2) < MAX_EDITDIST:
+                    valid = True
+            if valid:
+                new_articles.append(a)
+    else:
+        new_articles = articles
 
     output_dir = "./output_" + dir + "/"
     
@@ -118,21 +121,25 @@ def get_article(filename, dir):
                 fo.write(" ")
             fo.write("\n\n")
 
-def get_articles(dir):
+def get_articles(dir, kw1, kw2):
     for root, dirs, files in os.walk(dir):
         print("Num files : " + str(len(files)))
         for f in files:
-            get_article(f, dir)
+            get_article(f, dir, kw1, kw2)
 
 def usage():
-    print("Usage : python article_parser.py <folder_with_txt_files>")
+    print("Usage : python article_parser.py <folder_with_txt_files> keyword1 [keyword2]")
     sys.exit(1)
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3 and len(sys.argv) != 4:
         usage()
     dir = sys.argv[1]
-    get_articles(dir)
+    kw1 = sys.argv[2]
+    kw2 = ""
+    if len(sys.argv) == 4:
+        kw2 = sys.argv[3]
+    get_articles(dir, kw1, kw2)
     
 
 if __name__ == '__main__':
